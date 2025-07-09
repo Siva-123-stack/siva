@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Generator with 10 Templates</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background-color: white;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin: 10px 5px 0 0;
+      padding: 10px 20px;
+      border: none;
+      background-color: #801B52;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .container {
+      display: none;
+      max-width: 1000px;
+      margin: 30px auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    section {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    /* TEMPLATE 1 */
+    .template1 {
+      display: flex;
+    }
+    .template1 .left {
+      background-color: #801B52;
+      color: white;
+      width: 30%;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px 0 0 10px;
+    }
+    .template1 .right {
+      background-color: white;
+      width: 70%;
+      padding: 30px;
+      border-radius: 0 10px 10px 0;
+    }
+    .template1 h2 {
+      color: #801B52;
+      margin-bottom: 10px;
+    }
+
+    /* TEMPLATE 2 */
+    .template2 {
+      display: flex;
+      border: 2px solid #007BFF;
+      border-radius: 8px;
+    }
+    .template2 .left {
+      background-color: #f8f9fa;
+      color: #007BFF;
+      width: 35%;
+      padding: 30px;
+      text-align: left;
+      border-radius: 8px 0 0 8px;
+      font-weight: bold;
+    }
+    .template2 .right {
+      background-color: #ffffff;
+      width: 65%;
+      padding: 30px;
+      border-radius: 0 8px 8px 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+    }
+    .template2 h2 {
+      color: #007BFF;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #007BFF;
+      padding-bottom: 4px;
+    }
+
+    /* TEMPLATE 3: Dark Mode */
+    .template3 {
+      display: flex;
+      background-color: #121212;
+      color: #eee;
+      border-radius: 10px;
+    }
+    .template3 .left {
+      background-color: #1f1f1f;
+      color: #80cbc4;
+      width: 30%;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px 0 0 10px;
+    }
+    .template3 .right {
+      background-color: #222;
+      width: 70%;
+      padding: 30px;
+      border-radius: 0 10px 10px 0;
+    }
+    .template3 h2 {
+      color: #80cbc4;
+    }
+
+    /* TEMPLATE 4: Minimalist */
+    .template4 {
+      display: block;
+      background-color: white;
+      color: #333;
+      max-width: 700px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 5px;
+      font-family: 'Helvetica Neue', sans-serif;
+      box-shadow: 0 0 10px #ccc;
+    }
+    .template4 .left,
+    .template4 .right {
+      width: 100%;
+      padding: 0;
+      text-align: left;
+    }
+    .template4 .left {
+      margin-bottom: 20px;
+    }
+    .template4 h2 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+      color: #555;
+    }
+
+    /* TEMPLATE 5: Bold Header */
+    .template5 {
+      display: flex;
+      border: 3px solid #ff5722;
+      border-radius: 10px;
+    }
+    .template5 .left {
+      background-color: #ffccbc;
+      color: #bf360c;
+      width: 25%;
+      padding: 40px 20px;
+      text-align: center;
+      font-weight: 700;
+      border-radius: 10px 0 0 10px;
+    }
+    .template5 .right {
+      background-color: #fff3e0;
+      width: 75%;
+      padding: 30px;
+      border-radius: 0 10px 10px 0;
+    }
+    .template5 h2 {
+      color: #bf360c;
+    }
+
+    /* TEMPLATE 6: Classic */
+    .template6 {
+      display: flex;
+      border: 1px solid #000;
+      background: #fafafa;
+      border-radius: 0;
+    }
+    .template6 .left {
+      background-color: #e0e0e0;
+      color: #000;
+      width: 35%;
+      padding: 20px;
+      text-align: left;
+    }
+    .template6 .right {
+      background-color: white;
+      width: 65%;
+      padding: 20px;
+    }
+    .template6 h2 {
+      color: #000;
+      text-transform: uppercase;
+      border-bottom: 2px solid #000;
+    }
+
+    /* TEMPLATE 7: Color Blocks */
+    .template7 {
+      display: flex;
+      box-shadow: 0 0 10px #bbb;
+      border-radius: 8px;
+    }
+    .template7 .left {
+      background: linear-gradient(45deg, #2196f3, #21cbf3);
+      color: white;
+      width: 30%;
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px 0 0 8px;
+    }
+    .template7 .right {
+      background: #f1f8ff;
+      width: 70%;
+      padding: 30px;
+      border-radius: 0 8px 8px 0;
+    }
+    .template7 h2 {
+      color: #0d47a1;
+    }
+
+    /* TEMPLATE 8: Modern */
+    .template8 {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      max-width: 900px;
+      margin: auto;
+      background: #fdfdfd;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #ccc;
+    }
+    .template8 .left {
+      background: #283593;
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 10px 0 0 10px;
+    }
+    .template8 .right {
+      padding: 40px 30px;
+      color: #212121;
+      border-radius: 0 10px 10px 0;
+    }
+    .template8 h2 {
+      border-bottom: 3px solid #283593;
+    }
+
+    /* TEMPLATE 9: Elegant */
+    .template9 {
+      max-width: 750px;
+      margin: auto;
+      padding: 40px;
+      background: #fff7e6;
+      color: #5d4037;
+      font-family: Georgia, serif;
+      border-radius: 15px;
+      box-shadow: 0 0 10px #b2853c;
+    }
+    .template9 .left, .template9 .right {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .template9 h2 {
+      font-style: italic;
+      border-bottom: 1px solid #d7ccc8;
+    }
+
+    /* TEMPLATE 10: Creative */
+    .template10 {
+      display: flex;
+      max-width: 900px;
+      margin: 30px auto;
+      background: #222;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #ff4081;
+      color: #ff4081;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .template10 .left {
+      background: #ff4081;
+      color: #222;
+      width: 28%;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px 0 0 10px;
+    }
+    .template10 .right {
+      background: #333;
+      width: 72%;
+      padding: 30px;
+      border-radius: 0 10px 10px 0;
+    }
+    .template10 h2 {
+      border-bottom: 2px dotted #ff4081;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="title">Resume Generator</h1>
+
+  <form id="resumeForm">
+    <select id="templateSelect" required>
+      <option value="" disabled selected>Select Template</option>
+      <option value="template1">Template 1 (Purple Sidebar)</option>
+      <option value="template2">Template 2 (Clean Blue & White)</option>
+      <option value="template3">Template 3 (Dark Mode)</option>
+      <option value="template4">Template 4 (Minimalist)</option>
+      <option value="template5">Template 5 (Bold Header)</option>
+      <option value="template6">Template 6 (Classic)</option>
+      <option value="template7">Template 7 (Color Blocks)</option>
+      <option value="template8">Template 8 (Modern)</option>
+      <option value="template9">Template 9 (Elegant)</option>
+      <option value="template10">Template 10 (Creative)</option>
+    </select>
+
+    <input type="file" id="profileImage" accept="image/*" /><br />
+    <input type="text" id="name" placeholder="Your Name" required /><br />
+    <input type="text" id="college" placeholder="College" /><br />
+    <input type="text" id="city" placeholder="City" /><br />
+    <input type="email" id="email" placeholder="Email" /><br />
+
+    <select id="state" required>
+      <option value="" disabled selected>Select State</option>
+      <option value="Andhra Pradesh">Andhra Pradesh</option>
+      <option value="Telangana">Telangana</option>
+      <option value="Tamil Nadu">Tamil Nadu</option>
+      <option value="Karnataka">Karnataka</option>
+      <option value="Kerala">Kerala</option>
+      <option value="Maharashtra">Maharashtra</option>
+      <option value="Odisha">Odisha</option>
+      <option value="West Bengal">West Bengal</option>
+      <option value="Delhi">Delhi</option>
+      <option value="Other">Other</option>
+    </select><br />
+
+    <input type="tel" id="phone" placeholder="Phone" /><br />
+    <textarea id="education" placeholder="Education (one per line)"></textarea><br />
+    <textarea id="achievements" placeholder="Achievements (one per line)"></textarea><br />
+    <textarea id="skills" placeholder="Soft Skills (one per line)"></textarea><br />
+    <textarea id="hardSkills" placeholder="Hard Skills (one per line)"></textarea><br />
+    <textarea id="work" placeholder="Work Experience (one per line)"></textarea><br />
+    <textarea id="languages" placeholder="Languages Known (one per line)"></textarea><br />
+    <textarea id="certificates" placeholder="Certificates (one per line)"></textarea><br />
+    <textarea id="hobbies" placeholder="Hobbies (one per line)"></textarea><br />
+
+    <button type="button" onclick="generateResume()">Generate Resume</button>
+  </form>
+
+  <div class="container" id="resumeOutput">
+    <div class="left">
+      <img id="outputPic" class="profile-pic" src="" alt="Profile" />
+      <h1 id="outName"></h1>
+      <p><strong>College:</strong> <span id="outCollege"></span></p>
+      <p><strong>City:</strong> <span id="outCity"></span></p>
+      <p><strong>Email:</strong> <span id="outEmail"></span></p>
+      <p><strong>State:</strong> <span id="outState"></span></p>
+      <p><strong>Phone:</strong> <span id="outPhone"></span></p>
+    </div>
+
+    <div class="right">
+      <section>
+        <h2>🎓 Education</h2>
+        <ul id="outEducation"></ul>
+      </section>
+      <section>
+        <h2>🏆 Achievements</h2>
+        <ul id="outAchievements"></ul>
+      </section>
+      <section>
+        <h2>💼 Soft Skills</h2>
+        <ul id="outSkills"></ul>
+      </section>
+      <section>
+        <h2>🔧 Hard Skills</h2>
+        <ul id="outHardSkills"></ul>
+      </section>
+      <section>
+        <h2>🧑‍💼 Work Experience</h2>
+        <ul id="outWork"></ul>
+      </section>
+      <section>
+        <h2>🗣️ Languages Known</h2>
+        <ul id="outLanguages"></ul>
+      </section>
+      <section>
+        <h2>📜 Certificates</h2>
+        <ul id="outCertificates"></ul>
+      </section>
+      <section>
+        <h2>🎯 Hobbies</h2>
+        <ul id="outHobbies"></ul>
+      </section>
+      <button onclick="downloadPDF()">Download PDF</button>
+    </div>
+  </div>
+
+  <script>
+    function generateResume() {
+      const resumeOutput = document.getElementById("resumeOutput");
+      // Remove previous template classes
+      for(let i=1; i<=10; i++){
+        resumeOutput.classList.remove("template"+i);
+      }
+
+      // Get selected template
+      const selectedTemplate = document.getElementById("templateSelect").value;
+      if (!selectedTemplate) {
+        alert("Please select a template");
+        return;
+      }
+
+      // Add the chosen template class
+      resumeOutput.classList.add(selectedTemplate);
+      resumeOutput.style.display = "flex";
+
+      // Fill data from form inputs
+      document.getElementById("outName").innerText = document.getElementById("name").value;
+      document.getElementById("outCollege").innerText = document.getElementById("college").value;
+      document.getElementById("outCity").innerText = document.getElementById("city").value;
+      document.getElementById("outEmail").innerText = document.getElementById("email").value;
+      document.getElementById("outState").innerText = document.getElementById("state").value;
+      document.getElementById("outPhone").innerText = document.getElementById("phone").value;
+
+      setList("education", "outEducation");
+      setList("achievements", "outAchievements");
+      setList("skills", "outSkills");
+      setList("hardSkills", "outHardSkills");
+      setList("work", "outWork");
+      setList("languages", "outLanguages");
+      setList("certificates", "outCertificates");
+      setList("hobbies", "outHobbies");
+
+      // Load profile image preview
+      const file = document.getElementById("profileImage").files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("outputPic").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        document.getElementById("outputPic").src = "";
+      }
+    }
+
+    function setList(inputId, outputId) {
+      const lines = document.getElementById(inputId).value.split("\n");
+      const ul = document.getElementById(outputId);
+      ul.innerHTML = "";
+      lines.forEach((line) => {
+        if (line.trim() !== "") {
+          const li = document.createElement("li");
+          li.innerText = line.trim();
+          ul.appendChild(li);
+        }
+      });
+    }
+
+    function downloadPDF() {
+      const element = document.getElementById("resumeOutput");
+      html2pdf().from(element).save("My_Resume.pdf");
+    }
+  </script>
+</body>
+</html>
